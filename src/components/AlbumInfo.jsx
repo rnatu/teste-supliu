@@ -1,32 +1,50 @@
 import "./styles.scss";
 
-export function AlbumInfo() {
+export function AlbumInfo({ name, year, tracks }) {
+  function fmtMSS(seconds) {
+    return (
+      (seconds - (seconds = seconds % 60)) / 60 +
+      (9 < seconds ? ":" : ":0") +
+      seconds
+    );
+  }
+
   return (
     <>
-      <header className="albumInfoContent__header">
-        <h4>Álbum: Rei do gado, 1961</h4>
+      <header className="albumTitle">
+        <h4>
+          Álbum: {name}, {year}
+        </h4>
       </header>
-      <main className="albumInfoContent__main">
-        <div className="trackMainInfo">
-          <div className="trackMainInfo__number">
+      <section className="albumInfoContent__header">
+        <div className="trackDescription__header">
+          <div>
             <p>Nº</p>
-            <p>1</p>
-            <p>2</p>
           </div>
 
-          <div className="trackMainInfo__title">
+          <div>
             <p>Faixa</p>
-            <p>O mineiro</p>
-            <p>O mineiro</p>
           </div>
         </div>
 
-        <div className="trackTime">
+        <div className="trackTime__header">
           <p>Duração</p>
-          <p>3:00</p>
-          <p>3:00</p>
         </div>
-      </main>
+      </section>
+
+      {tracks.map((track) => (
+        <section className="albumInfoContent" key={track.id}>
+          <div className="trackDescription">
+            <p>{track.number}</p>
+
+            <p>{track.title}</p>
+          </div>
+
+          <div className="trackTime">
+            <p>{fmtMSS(track.duration)}</p>
+          </div>
+        </section>
+      ))}
     </>
   );
 }

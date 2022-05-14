@@ -1,8 +1,27 @@
 import "./styles.scss";
 import logo from "../assets/logo.png";
 import { AlbumInfo } from "../components/AlbumInfo";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export function Home() {
+  const [discography, setDiscography] = useState([]);
+
+  useEffect(() => {
+    (async function loadApiData() {
+      const { data: apiResponse } = await axios.get(
+        "https://tiao.supliu.com.br/api/album",
+        {
+          headers: {
+            Authorization: "rnatu91@gmail.com",
+          },
+        }
+      );
+
+      setDiscography(apiResponse.data);
+    })();
+  }, []);
+
   return (
     <div className="homeContainer">
       <main className="homeContent">
@@ -20,17 +39,14 @@ export function Home() {
             <button type="submit">Procurar</button>
           </form>
 
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
-          <AlbumInfo />
+          {discography.map((album) => (
+            <AlbumInfo
+              key={album.id}
+              name={album.name}
+              year={album.year}
+              tracks={album.tracks}
+            />
+          ))}
         </section>
       </main>
     </div>
