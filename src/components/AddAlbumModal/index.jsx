@@ -1,8 +1,9 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import loadApiData from "../../utils/loadApiData";
 import "./styles.scss";
 
-export function AddAlbumModal({ modalStatus, setModalStatus, loadApiData }) {
+export function AddAlbumModal({ modalStatus, setModalStatus, setDiscography }) {
   const modalRef = useRef(null);
   const [inputAlbumName, setInputAlbumName] = useState("");
   const [inputAlbumYear, setInputAlbumYear] = useState("");
@@ -45,7 +46,9 @@ export function AddAlbumModal({ modalStatus, setModalStatus, loadApiData }) {
       }
     );
 
-    await loadApiData();
+    const data = await loadApiData();
+    setDiscography(data);
+
     alert("Adicionado");
     handleCloseModal();
   }

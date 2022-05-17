@@ -1,63 +1,25 @@
 import "./styles.scss";
 import logo from "../assets/logo.png";
 
-import axios from "axios";
+import { useEffect, useState } from "react";
+
+import loadApiData from "../utils/loadApiData";
 
 import { AlbumInfo } from "../components/AlbumInfo";
-
-import { useEffect, useState } from "react";
 import { SearchBar } from "../components/SearchBar";
 import { AddAlbumModal } from "../components/AddAlbumModal";
 
 export function Home() {
   const [discography, setDiscography] = useState([]);
-  const [inputSearch, setInputSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [modalStatus, setModalStatus] = useState("");
 
-  async function loadApiData() {
-    const { data: apiResponse } = await axios.get(
-      "https://tiao.supliu.com.br/api/album",
-      {
-        headers: {
-          Authorization: "rnatu91@gmail.com",
-        },
-      }
-    );
-    setDiscography(apiResponse.data);
-
-    console.log("api fn");
-  }
-
   useEffect(() => {
     (async function () {
-      await loadApiData();
-      console.log("oooooooooo");
+      const data = await loadApiData();
+      setDiscography(data);
     })();
   }, []);
-
-  function handleSearchSubmit(e) {
-    e.preventDefault();
-
-    if (inputSearch === "") {
-      alert("A busca não pode estar vazia");
-      return;
-    }
-
-    setInputSearch("");
-
-    const searchResult = discography.filter((album) =>
-      album.name
-        .toLocaleLowerCase()
-        .startsWith(inputSearch?.toLocaleLowerCase())
-    );
-
-    if (searchResult.length === 0) {
-      alert("Não foi encontrado resultados para a busca");
-      return;
-    }
-    setSearchResult(searchResult);
-  }
 
   function OpenModal() {
     setModalStatus("active");
@@ -75,9 +37,8 @@ export function Home() {
           <p>Digite uma palavra chave</p>
 
           <SearchBar
-            handleSearchSubmit={handleSearchSubmit}
-            inputSearch={inputSearch}
-            setInputSearch={setInputSearch}
+            discography={discography}
+            setSearchResult={setSearchResult}
           />
 
           <button onClick={OpenModal} className="addNewAlbumBtn">
@@ -88,7 +49,7 @@ export function Home() {
             <AddAlbumModal
               modalStatus={modalStatus}
               setModalStatus={setModalStatus}
-              loadApiData={loadApiData}
+              setDiscography={setDiscography}
             />
           )}
 
