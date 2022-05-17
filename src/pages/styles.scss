@@ -28,28 +28,23 @@
   .mainContent {
     padding: 15px;
 
-    .mainContent__searchBar {
-      margin-top: 5px;
+    .addNewAlbumBtn {
+      background-color: rgb(59, 167, 255);
+      border: none;
+      padding: 0.8rem;
+      color: #fff;
+      border-radius: 10px;
 
-      display: flex;
-      justify-content: space-between;
+      width: 200px;
 
-      input {
-        width: 75%;
-        border: none;
-        border-radius: 50px;
-        padding: 10px 20px;
-        color: rgb(155, 155, 155);
-      }
-
-      button {
-        border: none;
-        border-radius: 50px;
-        width: 22%;
-        background-color: rgb(59, 167, 255);
-        color: #fff;
-        padding: 0.9rem;
-      }
+      display: block;
+      margin: 1rem auto;
     }
+  }
+}
+
+@media (max-width: 375px) {
+  .homeContent__header {
+    flex-direction: column;
   }
 }

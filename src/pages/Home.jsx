@@ -1,13 +1,19 @@
 import "./styles.scss";
 import logo from "../assets/logo.png";
-import { AlbumInfo } from "../components/AlbumInfo";
-import { useEffect, useState } from "react";
+
 import axios from "axios";
+
+import { AlbumInfo } from "../components/AlbumInfo";
+
+import { useEffect, useState } from "react";
+import { SearchBar } from "../components/SearchBar";
+import { AddAlbumModal } from "../components/AddAlbumModal";
 
 export function Home() {
   const [discography, setDiscography] = useState([]);
   const [inputSearch, setInputSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [modalStatus, setModalStatus] = useState("");
 
   async function loadApiData() {
     const { data: apiResponse } = await axios.get(
@@ -19,11 +25,14 @@ export function Home() {
       }
     );
     setDiscography(apiResponse.data);
+
+    console.log("api fn");
   }
 
   useEffect(() => {
     (async function () {
       await loadApiData();
+      console.log("oooooooooo");
     })();
   }, []);
 
@@ -50,6 +59,10 @@ export function Home() {
     setSearchResult(searchResult);
   }
 
+  function OpenModal() {
+    setModalStatus("active");
+  }
+
   return (
     <div className="homeContainer">
       <main className="homeContent">
@@ -61,20 +74,23 @@ export function Home() {
         <section className="mainContent">
           <p>Digite uma palavra chave</p>
 
-          <form
-            action="/"
-            className="mainContent__searchBar"
-            onSubmit={(e) => handleSearchSubmit(e)}
-          >
-            <input
-              type="word"
-              placeholder="Pesquisar álbuns por nome"
-              value={inputSearch}
-              onChange={(e) => setInputSearch(e.target.value)}
-            />
+          <SearchBar
+            handleSearchSubmit={handleSearchSubmit}
+            inputSearch={inputSearch}
+            setInputSearch={setInputSearch}
+          />
 
-            <button type="submit">Procurar</button>
-          </form>
+          <button onClick={OpenModal} className="addNewAlbumBtn">
+            Adicionar novo album
+          </button>
+
+          {modalStatus === "active" && (
+            <AddAlbumModal
+              modalStatus={modalStatus}
+              setModalStatus={setModalStatus}
+              loadApiData={loadApiData}
+            />
+          )}
 
           {searchResult.length === 0
             ? discography.map((album) => (
