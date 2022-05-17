@@ -27,7 +27,7 @@ export function AlbumInfo({ name, year, tracks }) {
           </div>
         </div>
 
-        <div className="trackTime__header">
+        <div>
           <p>Duração</p>
         </div>
       </section>
@@ -40,7 +40,7 @@ export function AlbumInfo({ name, year, tracks }) {
             <p>{track.title}</p>
           </div>
 
-          <div className="trackTime">
+          <div>
             <p>{fmtMSS(track.duration)}</p>
           </div>
         </section>
