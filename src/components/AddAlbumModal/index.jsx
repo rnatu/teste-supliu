@@ -1,7 +1,9 @@
-import axios from "axios";
-import { useEffect, useRef, useState } from "react";
-import loadApiData from "../../utils/loadApiData";
 import "./styles.scss";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import loadApiData from "../../utils/loadApiData";
+
+import { FiXCircle } from "react-icons/fi";
 
 export function AddAlbumModal({ modalStatus, setModalStatus, setDiscography }) {
   const modalRef = useRef(null);
@@ -19,11 +21,11 @@ export function AddAlbumModal({ modalStatus, setModalStatus, setDiscography }) {
   async function handleAddAlbum(e) {
     e.preventDefault();
 
-    if (inputAlbumName === "") {
-      alert("Nome não pode estar vazio");
+    if (!inputAlbumName) {
+      alert("Nome do album não pode estar vazio");
       return;
-    } else if (inputAlbumYear === "") {
-      alert("Ano não pode estar vazio");
+    } else if (!inputAlbumYear) {
+      alert("Ano do album não pode estar vazio");
       return;
     }
 
@@ -49,7 +51,7 @@ export function AddAlbumModal({ modalStatus, setModalStatus, setDiscography }) {
     const data = await loadApiData();
     setDiscography(data);
 
-    alert("Adicionado");
+    alert("Album Adicionado");
     handleCloseModal();
   }
 
@@ -61,7 +63,7 @@ export function AddAlbumModal({ modalStatus, setModalStatus, setDiscography }) {
     >
       <div className="modal">
         <button className="closeModalButton" onClick={handleCloseModal}>
-          X
+          <FiXCircle size={25} />
         </button>
         <form action="#" className="modalForm" onSubmit={handleAddAlbum}>
           <label htmlFor="albumName">Nome do album</label>

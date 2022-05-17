@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 
 import loadApiData from "../utils/loadApiData";
 
-import { AlbumInfo } from "../components/AlbumInfo";
 import { SearchBar } from "../components/SearchBar";
 import { AddAlbumModal } from "../components/AddAlbumModal";
+import { AlbumCard } from "../components/AlbumCard";
 
 export function Home() {
   const [discography, setDiscography] = useState([]);
@@ -55,19 +55,23 @@ export function Home() {
 
           {searchResult.length === 0
             ? discography.map((album) => (
-                <AlbumInfo
+                <AlbumCard
                   key={album.id}
+                  albumId={album.id}
                   name={album.name}
                   year={album.year}
                   tracks={album.tracks}
+                  setDiscography={setDiscography}
                 />
               ))
             : searchResult.map((album) => (
-                <AlbumInfo
+                <AlbumCard
                   key={album.id}
+                  albumId={album.id}
                   name={album.name}
                   year={album.year}
                   tracks={album.tracks}
+                  setDiscography={setDiscography}
                 />
               ))}
         </section>
