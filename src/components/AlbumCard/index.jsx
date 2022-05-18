@@ -1,54 +1,56 @@
-import "./styles.scss";
+import './styles.scss';
 
-import { FiTrash2, FiPlusSquare } from "react-icons/fi";
-import axios from "axios";
+import { FiTrash2, FiPlusSquare } from 'react-icons/fi';
+import axios from 'axios';
+import PropTypes from 'prop-types';
 
-import loadApiData from "../../utils/loadApiData";
-import { useState } from "react";
+import { useState } from 'react';
+import loadApiData from '../../utils/loadApiData';
 
-import { AddTrackModal } from "../addTrackModal";
+import { AddTrackModal } from '../addTrackModal';
 
 export function AlbumCard({ name, year, tracks, albumId, setDiscography }) {
-  const [modalStatus, setModalStatus] = useState("");
+  const [modalStatus, setModalStatus] = useState('');
 
   function OpenModal() {
-    setModalStatus("active");
+    setModalStatus('active');
   }
 
-  function fmtMSS(seconds) {
-    return (
-      (seconds - (seconds = seconds % 60)) / 60 +
-      (9 < seconds ? ":" : ":0") +
-      seconds
-    );
+  function secondsToMinutesFormatted(seconds) {
+    let timeInSeconds = seconds;
+    const formattedTime =
+      (timeInSeconds - (timeInSeconds %= 60)) / 60 +
+      (timeInSeconds > 9 ? ':' : ':0') +
+      timeInSeconds;
+    return formattedTime;
   }
 
   async function removeAlbum() {
     await axios.delete(`https://tiao.supliu.com.br/api/album/${albumId}`, {
       headers: {
-        Authorization: "rnatu91@gmail.com",
-        "Content-type": "application/json",
+        Authorization: 'rnatu91@gmail.com',
+        'Content-type': 'application/json',
       },
     });
 
     const data = await loadApiData();
     setDiscography(data);
 
-    alert("Album Removido");
+    alert('Album Removido');
   }
 
   async function removeTrack(trackId) {
     await axios.delete(`https://tiao.supliu.com.br/api/track/${trackId}`, {
       headers: {
-        Authorization: "rnatu91@gmail.com",
-        "Content-type": "application/json",
+        Authorization: 'rnatu91@gmail.com',
+        'Content-type': 'application/json',
       },
     });
 
     const data = await loadApiData();
     setDiscography(data);
 
-    alert("Faixa Removida");
+    alert('Faixa Removida');
   }
 
   return (
@@ -58,11 +60,11 @@ export function AlbumCard({ name, year, tracks, albumId, setDiscography }) {
           Álbum: {name}, {year}
         </h4>
 
-        <button className="deleteAlbumBtn" onClick={removeAlbum}>
+        <button type="button" className="deleteAlbumBtn" onClick={removeAlbum}>
           <FiTrash2 size={18} />
         </button>
 
-        <button className="addTrackBtn" onClick={OpenModal}>
+        <button type="button" className="addTrackBtn" onClick={OpenModal}>
           <FiPlusSquare size={18} />
         </button>
       </header>
@@ -89,6 +91,7 @@ export function AlbumCard({ name, year, tracks, albumId, setDiscography }) {
 
             <p>{track.title}</p>
             <button
+              type="button"
               className="deleteAlbumBtn"
               onClick={() => removeTrack(track.id)}
             >
@@ -97,11 +100,11 @@ export function AlbumCard({ name, year, tracks, albumId, setDiscography }) {
           </div>
 
           <div>
-            <p>{fmtMSS(track.duration)}</p>
+            <p>{secondsToMinutesFormatted(track.duration)}</p>
           </div>
         </section>
       ))}
-      {modalStatus === "active" && (
+      {modalStatus === 'active' && (
         <AddTrackModal
           modalStatus={modalStatus}
           setModalStatus={setModalStatus}
@@ -112,3 +115,18 @@ export function AlbumCard({ name, year, tracks, albumId, setDiscography }) {
     </>
   );
 }
+
+AlbumCard.propTypes = {
+  name: PropTypes.string,
+  year: PropTypes.number,
+  tracks: PropTypes.arrayOf(
+    PropTypes.shape({
+      duration: PropTypes.number,
+      id: PropTypes.number,
+      number: PropTypes.number,
+      title: PropTypes.string,
+    }),
+  ),
+  albumId: PropTypes.number,
+  setDiscography: PropTypes.func,
+};

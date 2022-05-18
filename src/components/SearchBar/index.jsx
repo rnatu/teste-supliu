@@ -1,13 +1,15 @@
-import { useState } from "react";
-import "./styles.scss";
+import { useState } from 'react';
+import './styles.scss';
+
+import PropTypes from 'prop-types';
 
 export function SearchBar({ setSearchResult, discography }) {
-  const [inputSearch, setInputSearch] = useState("");
+  const [inputSearch, setInputSearch] = useState('');
 
   function handleSearchSubmit(e) {
     e.preventDefault();
 
-    if (inputSearch === "") {
+    if (inputSearch === '') {
       setSearchResult(discography);
       return;
     }
@@ -15,11 +17,11 @@ export function SearchBar({ setSearchResult, discography }) {
     const searchResult = discography.filter((album) =>
       album.name
         .toLocaleLowerCase()
-        .startsWith(inputSearch?.toLocaleLowerCase())
+        .startsWith(inputSearch?.toLocaleLowerCase()),
     );
 
     if (searchResult.length === 0) {
-      alert("Não foi encontrado resultados para a busca");
+      alert('Não foi encontrado resultados para a busca');
       return;
     }
     setSearchResult(searchResult);
@@ -38,3 +40,22 @@ export function SearchBar({ setSearchResult, discography }) {
     </form>
   );
 }
+
+SearchBar.propTypes = {
+  setSearchResult: PropTypes.func,
+  discography: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+      tracks: PropTypes.arrayOf(
+        PropTypes.shape({
+          duration: PropTypes.number,
+          id: PropTypes.number,
+          number: PropTypes.number,
+          title: PropTypes.string,
+        }),
+      ),
+      year: PropTypes.number,
+    }),
+  ),
+};

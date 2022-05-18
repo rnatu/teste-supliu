@@ -1,17 +1,17 @@
-import "./styles.scss";
-import { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import loadApiData from "../../utils/loadApiData";
-
-import { FiXCircle } from "react-icons/fi";
+import './styles.scss';
+import { useEffect, useRef, useState } from 'react';
+import axios from 'axios';
+import { FiXCircle } from 'react-icons/fi';
+import PropTypes from 'prop-types';
+import loadApiData from '../../utils/loadApiData';
 
 export function AddAlbumModal({ modalStatus, setModalStatus, setDiscography }) {
   const modalRef = useRef(null);
-  const [inputAlbumName, setInputAlbumName] = useState("");
-  const [inputAlbumYear, setInputAlbumYear] = useState("");
+  const [inputAlbumName, setInputAlbumName] = useState('');
+  const [inputAlbumYear, setInputAlbumYear] = useState('');
 
   function handleCloseModal() {
-    setModalStatus("");
+    setModalStatus('');
   }
 
   useEffect(() => {
@@ -22,71 +22,88 @@ export function AddAlbumModal({ modalStatus, setModalStatus, setDiscography }) {
     e.preventDefault();
 
     if (!inputAlbumName) {
-      alert("Nome do album não pode estar vazio");
+      alert('Nome do album não pode estar vazio');
       return;
-    } else if (!inputAlbumYear) {
-      alert("Ano do album não pode estar vazio");
+    }
+    if (!inputAlbumYear) {
+      alert('Ano do album não pode estar vazio');
       return;
     }
 
     if (/^(19|20)\d{2}$/.test(inputAlbumYear) === false) {
-      alert("Ano incorreto");
+      alert('Ano incorreto');
       return;
     }
 
     await axios.post(
-      "https://tiao.supliu.com.br/api/album",
+      'https://tiao.supliu.com.br/api/album',
       {
         name: inputAlbumName,
         year: inputAlbumYear,
       },
       {
         headers: {
-          Authorization: "rnatu91@gmail.com",
-          "Content-type": "application/json",
+          Authorization: 'rnatu91@gmail.com',
+          'Content-type': 'application/json',
         },
-      }
+      },
     );
 
     const data = await loadApiData();
     setDiscography(data);
 
-    alert("Album Adicionado");
+    alert('Album Adicionado');
     handleCloseModal();
   }
 
   return (
     <div
       className={`modal-overlay ${modalStatus}`}
-      onKeyDown={(e) => e.key === "Escape" && handleCloseModal()}
+      onKeyDown={(e) => e.key === 'Escape' && handleCloseModal()}
       tabIndex="0"
+      role="presentation"
     >
       <div className="modal">
-        <button className="closeModalButton" onClick={handleCloseModal}>
+        <button
+          className="closeModalButton"
+          onClick={handleCloseModal}
+          type="button"
+        >
           <FiXCircle size={25} />
         </button>
         <form action="#" className="modalForm" onSubmit={handleAddAlbum}>
-          <label htmlFor="albumName">Nome do album</label>
-          <input
-            id="albumName"
-            type="text"
-            ref={modalRef}
-            placeholder="Ex: Rei do gado"
-            value={inputAlbumName}
-            onChange={(e) => setInputAlbumName(e.target.value)}
-          />
+          <label htmlFor="albumName">
+            Nome do album
+            <input
+              id="albumName"
+              type="text"
+              ref={modalRef}
+              placeholder="Ex: Rei do gado"
+              value={inputAlbumName}
+              onChange={(e) => setInputAlbumName(e.target.value)}
+            />
+          </label>
 
-          <label htmlFor="albumYear">Ano do album</label>
-          <input
-            id="albumYear"
-            type="text"
-            placeholder="Ex: 1991"
-            value={inputAlbumYear}
-            onChange={(e) => setInputAlbumYear(e.target.value)}
-          />
+          <label htmlFor="albumYear">
+            Ano do album
+            <input
+              id="albumYear"
+              type="text"
+              placeholder="Ex: 1991"
+              value={inputAlbumYear}
+              onChange={(e) => setInputAlbumYear(e.target.value)}
+            />
+          </label>
+
           <button type="submit">Criar</button>
         </form>
       </div>
     </div>
   );
 }
+
+AddAlbumModal.propTypes = {
+  modalStatus: PropTypes.string,
+  setModalStatus: PropTypes.func,
+  setDiscography: PropTypes.func,
+};

@@ -1,28 +1,27 @@
-import "./styles.scss";
-import logo from "../assets/logo.png";
+import './styles.scss';
+import { useEffect, useState } from 'react';
+import logo from '../assets/logo.png';
 
-import { useEffect, useState } from "react";
+import loadApiData from '../utils/loadApiData';
 
-import loadApiData from "../utils/loadApiData";
-
-import { SearchBar } from "../components/SearchBar";
-import { AddAlbumModal } from "../components/AddAlbumModal";
-import { AlbumCard } from "../components/AlbumCard";
+import { SearchBar } from '../components/SearchBar';
+import { AddAlbumModal } from '../components/AddAlbumModal';
+import { AlbumCard } from '../components/AlbumCard';
 
 export function Home() {
   const [discography, setDiscography] = useState([]);
   const [searchResult, setSearchResult] = useState([]);
-  const [modalStatus, setModalStatus] = useState("");
+  const [modalStatus, setModalStatus] = useState('');
 
   useEffect(() => {
-    (async function () {
+    (async function initialLoadData() {
       const data = await loadApiData();
       setDiscography(data);
     })();
   }, []);
 
   function OpenModal() {
-    setModalStatus("active");
+    setModalStatus('active');
   }
 
   return (
@@ -41,11 +40,11 @@ export function Home() {
             setSearchResult={setSearchResult}
           />
 
-          <button onClick={OpenModal} className="addNewAlbumBtn">
+          <button type="button" onClick={OpenModal} className="addNewAlbumBtn">
             Adicionar novo album
           </button>
 
-          {modalStatus === "active" && (
+          {modalStatus === 'active' && (
             <AddAlbumModal
               modalStatus={modalStatus}
               setModalStatus={setModalStatus}

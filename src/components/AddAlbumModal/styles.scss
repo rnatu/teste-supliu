@@ -49,6 +49,11 @@
 
     label {
       margin-top: 15px;
+      display: flex;
+      flex-direction: column;
+      input {
+        width: 15rem;
+      }
     }
 
     button {
